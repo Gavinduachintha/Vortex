@@ -59,23 +59,23 @@ func (a App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 
 		// Global quit
-		case "ctrl+c", "q":
+		case "ctrl+q":
 			return a, tea.Quit
 
 		// Switch to chat view, focus chat
-		case "c":
+		case "ctrl+c":
 			a.active = viewChat
 			a.sidebarFoc = false
 			return a, nil
 
 		// Switch to memory view
-		case "m":
+		case "ctrl+m":
 			a.active = viewMemory
 			a.sidebarFoc = false
 			return a, nil
 
 		// Switch to timeline view
-		case "t":
+		case "ctrl+t":
 			a.active = viewTimeline
 			a.sidebarFoc = false
 			return a, nil
@@ -86,7 +86,7 @@ func (a App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return a, nil
 
 		// Arrow / vim keys — route to sidebar or chat
-		case "up", "down", "k", "j":
+		case "up", "down", "ctrl+k", "ctrl+j":
 			if a.sidebarFoc {
 				var selectedView string
 				a.sidebar, selectedView = a.sidebar.Update(msg)
@@ -193,13 +193,13 @@ func (a *App) recalcSizes() {
 // helpBar renders the keyboard shortcut hint strip
 func (a App) helpBar() string {
 	keys := []string{
-		keyHint("c", "chat"),
-		keyHint("m", "memory"),
-		keyHint("t", "timeline"),
+		keyHint("ctrl+c", "chat"),
+		keyHint("ctrl+m", "memory"),
+		keyHint("ctrl+t", "timeline"),
 		keyHint("tab", "focus sidebar"),
 		keyHint("↑↓", "navigate"),
 		keyHint("enter", "select"),
-		keyHint("q", "quit"),
+		keyHint("ctrl+q", "quit"),
 	}
 
 	bar := strings.Join(keys, mutedStyle.Render("  ·  "))
