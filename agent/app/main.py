@@ -1,10 +1,22 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
+from pydantic import BaseModel
+from app.agent.agent import ask_question
+app = FastAPI(
+    title="Vortex AI Agent",
+    version="0.1.0",
+)
 
-app = FastAPI()
+class QuestionRequest(BaseModel):
+    question: str
 
-@app.post("/webhook")
-async def github_webhook(request: Request):
-    payload = await request.json()
-    # Process the GitHub webhook payload here
-    print(payload)
-    return {"status": "received"}
+class AnswerResponse(BaseModel):
+    answer: str
+
+@app.get("/")
+async def root():
+    return {"message": "Welcome to the Vortex AI Agent API!"}
+
+@app.post("/ask", response_model=AnswerResponse)
+def ask_endpoint(request: QuestionRequest):
+    answer =ask_question(request.question)
+    return AnswerResponse(answer=answer)
