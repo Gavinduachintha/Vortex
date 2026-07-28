@@ -2,10 +2,14 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from app.agent.agent import ask_question
 from app.embeddings.titan import make_embeddings
+from app.github.webhook import router
+
 app = FastAPI(
     title="Vortex AI Agent",
     version="0.1.0",
 )
+
+app.include_router(router)
 
 class QuestionRequest(BaseModel):
     question: str
